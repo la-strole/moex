@@ -4,7 +4,7 @@ db.py registered at __init__.py and app init with init_app()
 """
 
 import sqlite3
-from flask import current_app, g
+from flask import current_app, g, url_for
 from moex_invest.helpers import helpers_functions
 
 
