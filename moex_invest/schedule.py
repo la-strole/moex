@@ -11,7 +11,7 @@ from datetime import datetime
 
 
 def schedule():
-    database_name = environ['DATABASENAME']
+    database_name = 'moex.db'
 
     def lookup(symbol):
         """
