@@ -80,6 +80,9 @@ def create_app():
     from . import sandbox
     app.register_blueprint(sandbox.bp)
 
+    # Set environment variable DATABASENAME for scheduler
+    os.environ['DATABASENAME'] = app.config.get("DATABASE")
+
     '''
     # Create test view
     @app.route("/hello")
