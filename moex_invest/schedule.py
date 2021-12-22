@@ -241,7 +241,7 @@ def schedule():
             f"Success. schedule.py second_mail(): Send {sent_mail_number} with notifications.")
         return sent_mail_number
 
-    def update_symbols(database):
+    def update_symbols():
         """
         Update tickers list of database from MOEX for AJAX response tin quote requests.
         :return: None
@@ -255,7 +255,7 @@ def schedule():
     first_mail(database)
     if helpers_functions.schedule_count == 23:
         second_mail(database)
-        update_symbols(database)
+        update_symbols()
 
 
 if __name__ == "__main__":
