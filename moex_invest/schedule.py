@@ -13,19 +13,6 @@ from datetime import datetime
 def schedule():
     database_name = environ['DATABASENAME']
 
-    try:
-        with open('schedule_counter.txt', 'r') as f:
-            file_data = f.read()
-            if file_data:
-                schedule_count = int(file_data) % 24
-            else:
-                schedule_count = 0
-    except FileNotFoundError:
-        schedule_count = 0
-
-    with open('schedule_counter.txt', 'w') as f:
-        file_data = f.write(f'{schedule_count + 1}')
-
     def lookup(symbol):
         """
         Look for MOEX API for ticker symbol.
@@ -351,7 +338,7 @@ def schedule():
                         f"Not notification in database {database}.")
             return None
 
-    def first_mail(database):
+    def mail(database):
         """
         Schedule job to send email every first email immediately if borders are exceeded.
         :return: None if errors, number of sent emails if success
@@ -360,7 +347,7 @@ def schedule():
         # Remove emails for client that already sent
         full_list = update_current_prices(database)
         if full_list:
-            mail_list = [item for item in full_list if item['email_sent'] == '0']
+            mail_list = full_list
         else:
             return None
 
@@ -412,88 +399,8 @@ def schedule():
                     f"Error. schedule.py first_mail(): Can not sen email to {row.get('email')}")
                 continue
 
-        # Update database depo email_sent = true
-        db_con = sqlite3.connect(database)
-        db_con.row_factory = sqlite3.Row
-        with db_con:
-            for row in mail_list:
-                try:
-                    db_con.execute("UPDATE depo "
-                                   "SET email_sent = ? "
-                                   "WHERE user_id = ? AND ticker = ?",
-                                   (True, row['user_id'], row['ticker']))
-                except sqlite3.Error as e:
-                    app_log_add(f"Error. schedule.py first_mail(): "
-                                f"Can not set emil_sent on depo table ({e})")
-                    continue
-        db_con.close()
-
         app_log_add(f"Success. schedule.py first_mail(): "
                     f"Send {sent_mail_number} with notifications.")
-        return sent_mail_number
-
-    def second_mail(database):
-        """
-        Schedule job to send second etc email every day if borders are exceeded. Not every hour.
-        :return: None or number of sent emails.
-        """
-
-        # Check notifications and current prices
-        full_list = update_current_prices(database)
-        if full_list:
-            mail_list = [item for item in full_list if item['email_sent'] != '0']
-        else:
-            return None
-
-        # Send email
-        try:
-            yag_session = yagmail.SMTP(environ.get('mail_login'), environ.get('mail_password'))
-        except:
-            app_log_add(f"Error. schedule.first_mail() Can not connect to gmail account.")
-            return None
-
-        text_footer = f"\n Это сообщение создано автоматически. Пожалуйста, не отвечайте на него. " \
-                      f"\n С уважением, Invest app Bot. " \
-                      f"{datetime.now(tz=pytz.timezone('Europe/Moscow')).today().strftime('%d.%m.%y')}"
-
-        sent_mail_number = 0
-
-        for row in mail_list:
-
-            # Set email title
-            text_title = f"Invest Bot {row.get('ticker').upper()} out of border"
-            text_body = ''
-
-            # Set text_body
-            if row.get('course') == 'minimal_limit':
-                if isinstance(row.get('date_time'), datetime):
-                    text_body = f"Внимание!\n{row.get('date_time').date().strftime('%d.%m.%y')} в " \
-                                f"{row.get('date_time').time().strftime('%H.%M.%S')} " \
-                                f"{row.get('ticker').upper()} стоит меньше нижней границы " \
-                                f"{row.get('min_border')}. Текущая стоимость {row.get('price')}."
-                else:
-                    text_body = f"Внимание!\n{row.get('ticker').upper()} стоит меньше нижней границы " \
-                                f"{row.get('min_border')}. Текущая стоимость {row.get('price')}."
-            elif row.get('course') == 'maximum_limit':
-                if isinstance(row.get('date_time'), datetime):
-                    text_body = f"Внимание!\n{row.get('date_time').date().strftime('%d.%m.%y')} в " \
-                                f"{row.get('date_time').time().strftime('%H:%M:%S')} " \
-                                f"{row.get('ticker').upper()} стоит больше верхней границы " \
-                                f"{row.get('max_border')}. Текущая стоимость {row.get('price')}."
-                else:
-                    text_body = f"Внимание!\n{row.get('ticker').upper()} стоит больше верхней границы " \
-                                f"{row.get('max_border')}. Текущая стоимость {row.get('price')}."
-
-            # Send email
-            try:
-                yag_session.send(to=f"{row.get('email')}", subject=text_title, contents=text_body + text_footer)
-                sent_mail_number += 1
-            except:
-                app_log_add(f"Error. schedule.first_mail(): Can not sen email to {row.get('email')}")
-                continue
-
-        app_log_add(
-            f"Success. schedule.py second_mail(): Send {sent_mail_number} with notifications.")
         return sent_mail_number
 
     def take_symbols():
@@ -636,10 +543,8 @@ def schedule():
         app_log_add(f"Success. schedule.py update_symbols(): "
                     f"Scheduler Update tickers listing from MOEX API. Number = {ticker_number}")
 
-    first_mail(database_name)
-    if schedule_count == 0:
-        second_mail(database_name)
-        update_symbols()
+    mail(database_name)
+    update_symbols()
 
 
 if __name__ == "__main__":
