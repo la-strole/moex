@@ -1,0 +1,134 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Rates
+{% endblock %}
+
+{% block main %}
+<div style="width: 90vw; display: block; max-width: 550px;">
+
+  <div class="row text-center w-100 m-0">
+    <h2 class="col mt-3 mb-3">Рейтинги</h2>
+  </div>
+
+  <div class="w-100">
+    <div class="row text-center m-0">
+      <h3 class="col mt-3 mb-3">Сумма активов</h3>
+    </div>
+
+    <table class="table align-middle table-hover w-100" style="background-color: #f8f9fa;">
+
+      <thead>
+        <tr class="row table-primary text-center m-0">
+          <th class="col-2"></th>
+          <th class="col-5">Имя</th>
+          <th class="col-5">Сумма активов</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for row in cash_sum %}
+        <tr class="row text-center m-0">
+          <th class="col-2">{{ loop.index }}</th>
+          <td class="col-5">{{ row.username }}</td>
+          <td class="col-5">{{ row.total_cash | finance }}&#160&#8381</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="w-100">
+    <div class="row text-center m-0">
+      <h3 class="col mt-3 mb-3">Диверсификация активов</h3>
+    </div>
+
+    <table class="table align-middle table-hover w-100" style="background-color: #f8f9fa;">
+
+      <thead>
+        <tr class="row table-primary text-center m-0">
+          <th class="col-2"></th>
+          <th class="col-5">Имя</th>
+          <th class="col-5">Количество активов</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for row in diversity_rate %}
+        <tr class="row text-center m-0">
+          <th class="col-2">{{ loop.index }}</th>
+          <td class="col-5">{{ row.username }}</td>
+          <td class="col-5">{{ row.diversity }}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="w-100">
+    <div class="row text-center m-0">
+      <h3 class="col mt-3 mb-3">Объем сделок</h3>
+    </div>
+
+    <table class="table align-middle table-hover w-100" style="background-color: #f8f9fa;">
+
+      <thead>
+        <tr class="row table-primary text-center m-0">
+          <th class="col-2"></th>
+          <th class="col-5">Имя</th>
+          <th class="col-5">Объем сделок</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for row in purchase_value %}
+        <tr class="row text-center m-0">
+          <th class="col-2">{{ loop.index }}</th>
+          <td class="col-5">{{ row.username }}</td>
+          <td class="col-5">{{ row.purchase_value | finance }}&#160&#8381</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="w-100">
+    <div class="row text-center m-0">
+      <h3 class="col mt-3 mb-3">Количество сделок</h3>
+    </div>
+
+    <table class="table align-middle table-hover w-100" style="background-color: #f8f9fa;">
+
+      <thead>
+        <tr class="row table-primary text-center m-0">
+          <th class="col-2"></th>
+          <th class="col-5">Имя</th>
+          <th class="col-5">Количество сделок</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        {% for row in purchase_number %}
+        <tr class="row text-center m-0">
+          <th class="col-2">{{ loop.index }}</th>
+          <td class="col-5">{{ row.username }}</td>
+          <td class="col-5">{{ row.purchase_number }}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

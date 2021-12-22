@@ -1,0 +1,59 @@
+/* background for mobile */
+@media (max-width: 640px) {
+    body {
+        background-image: url(/static/background_small.jpg);
+    }
+}
+/* background for tablets and desktops */
+@media (min-width: 641px) {
+    body {
+        background-image: url(/static/background_large.jpg);
+    }
+}
+body {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-width: 100vw;
+    font-family: Roboto, Arial, sans-serif;
+    overflow-x: hidden;
+}
+main {
+    flex: 1;
+    min-width: inherit;
+    /*border: solid blue;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.logo_img {
+    height: 7vh;
+}
+.navbar-nav {
+font-size: 1.5em;
+}
+.footer_ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: 0.875em;
+}
+.footer_ui_head {
+    font-size: 1.1em;
+}
+a:link {
+    text-decoration: none;
+}
+a:visited {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+a:active {
+    text-decoration: underline;
+}

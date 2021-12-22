@@ -1,0 +1,255 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Depo
+{% endblock %}
+
+{% block main %}
+
+
+<style>
+  @media all and (min-width: 1200px) {
+    .desktop {
+      display: block;
+    }
+
+    .mobile {
+      display: none;
+    }
+  }
+
+  @media all and (max-width: 1200px) {
+    .desktop {
+      display: none;
+    }
+
+    .mobile {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .dropdown-toggle {
+
+      overflow-wrap: break-word;
+      white-space: inherit;
+    }
+
+    .font_full_size {
+      font-size: 1rem;
+    }
+
+    .mob_table_head {
+      background-color: #cfe2ff;
+    }
+
+    .mob_table_footer {
+      background-color: #e2e3e5;
+    }
+
+  }
+</style>
+
+<script>
+  function enable_update_button() {
+    // enable update button then change min max
+    let element = document.getElementById("button_update");
+    if (element) {
+      if (element.classList.contains('disabled')) {
+        element.classList.remove('disabled');
+      }
+    }
+    let element_mobile = document.getElementById("button_update_mobile");
+    if (element_mobile) {
+      if (element_mobile.classList.contains('disabled')) {
+        element_mobile.classList.remove('disabled');
+      }
+    }
+  }
+</script>
+
+<form action="/sandbox/depo" method="post" class="desktop" style="width: 1200px; background-color: #f8f9fa;">
+
+  <div class="row text-center justify-content-center m-0">
+    <h2 class="col mt-3 mb-3">Портфель {{ g.user['username'] }}</h2>
+  </div>
+
+  <table class="table align-middle table-hover">
+    <thead>
+      <tr class="row table-primary text-center justify-content-center m-0">
+        <th class="col-1" style="max-width: 60px;"></th>
+        <th class="col-1" style="max-width: 100px;">Тикер</th>
+        <th class="col-2">Имя</th>
+        <th class="col-1" style="min-width: 120px;">Тип</th>
+        <th class="col-1">Кол-во</th>
+        <th class="col-1">Стоимость</th>
+        <th class="col-2">Всего</th>
+        {% if g.user['email'] %}
+        <th class="col-2" style="max-width: 220px;">Уведомление</th>
+        {% endif %}
+        <th class="col-1"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {% for ticker in tickers %}
+      <tr class="row text-center justify-content-center m-0">
+        <th class="col-1" style="max-width: 60px;"> {{ loop.index }}</th>
+        <td class="col-1" style="max-width: 100px;">{{ ticker.ticker | upper() }}</td>
+        <td class="col-2">{{ ticker.name }}</td>
+        <td class="col-1" style="min-width: 120px;">{{ ticker.market }}</td>
+        <td class="col-1">{{ ticker.number }}</td>
+
+        {% if ticker.market == 'облигации' %}
+        <td class="col-1">{{ ticker.current_price | finance }}&#160%</td>
+        {% else %}
+        {% if ticker.currency_symbol == 'eur' %}
+        <td class="col-1">{{ ticker.current_price | finance }}&#160&#8364</td>
+        {% elif ticker.currency_symbol == 'usd' %}
+        <td class="col-1">{{ ticker.current_price | finance }}&#160$</td>
+        {% else %}
+        <td class="col-1">{{ ticker.current_price | finance }}&#160&#8381</td>
+        {% endif %}
+        {% endif %}
+
+        <td class="col-2">{{ ticker.final_price | finance }}&#160&#8381</td>
+
+        {% if g.user['email'] %}
+        <td class="col-2" style="max-width: 220px;">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control" name="min_border {{ticker.ticker}}" autocomplete="off" placeholder="Min" value="{% if ticker.min_border%}{{ticker.min_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
+            <input type="text" class="form-control" name="max_border {{ticker.ticker}}" autocomplete="off" placeholder="Max" value="{% if ticker.max_border%}{{ticker.max_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
+            <div class="input-group-text">
+              {% if ticker.notification == 'true' %}
+              <input class="form-check-input mt-0" type="checkbox" name="check_notify {{ticker.ticker}}" value="true" autocomplete="off" checked onchange="enable_update_button()">
+              {% else %}
+              <input class="form-check-input mt-0" type="checkbox" name="check_notify {{ticker.ticker}}" value="true" autocomplete="off" onchange="enable_update_button()">
+              {% endif %}
+            </div>
+          </div>
+        </td>
+        {% endif %}
+
+        <td class="col-1"> <button id="button_sell" class="btn btn-sm btn-outline-primary" type="button" onclick="location.href = '/sandbox/sell?q={{ticker.ticker}}';">Продать</button> </td>
+
+      </tr>
+      {% endfor %}
+
+      <tr class="row table-secondary justify-content-center m-0">
+        <th class="col-1" style="max-width: 60px;"></th>
+        <th class="col-1" style="max-width: 100px;"></th>
+        <th class="col-2"></th>
+        <th class="col-1" style="min-width: 120px;"></th>
+        <th class="col-1"></th>
+        <th class="col-1">Баланс</th>
+        <th class="col-2 text-end">{{ cash | finance}}&#160&#8381</th>
+        {% if g.user['email'] %}
+        <th class="col-2" style="max-width: 220px;"></th>
+        {% endif %}
+        <th class="col-1"></th>
+      </tr>
+      <tr class="row table-secondary justify-content-center m-0">
+        <th class="col-1" style="max-width: 60px;"></th>
+        <th class="col-1" style="max-width: 100px;"></th>
+        <th class="col-2"></th>
+        <th class="col-1" style="min-width: 120px;"></th>
+        <th class="col-1"></th>
+        <th class="col-1">Итого</th>
+        <th class="col-2 text-end">{{ total | finance}}&#160&#8381</th>
+        {% if g.user['email'] %}
+        <th class="col-2" style="max-width: 220px;"></th>
+        {% endif %}
+        <th class="col-1"></th>
+      </tr>
+    </tbody>
+  </table>
+
+  {% if g.user['email'] %}
+  <button id="button_update" class="btn btn-outline-primary w-100 disabled mb-3" type="submit">Применить</button>
+  {% endif %}
+</form>
+
+
+<form action="/sandbox/depo" method="post" class="mobile w-100" style="max-width: 780px; background-color: #f8f9fa;">
+
+  <div class="row text-center justify-content-center m-0">
+    <h2 class="col mt-3 mb-3">Портфель {{ g.user['username'] }}</h2>
+  </div>
+
+
+  <ul class="list-group list-group-horizontal row text-center w-100 m-0 p-0">
+    <li class="list-group-item mob_table_head col-3 fw-bold">Тикер</li>
+    <li class="list-group-item mob_table_head col-2 fw-bold">Кол-во</li>
+    <li class="list-group-item mob_table_head col-3 fw-bold">Цена ед</li>
+    <li class="list-group-item mob_table_head col-4 fw-bold">Всего</li>
+  </ul>
+
+  {% for ticker in tickers %}
+  <ul class="list-group list-group-horizontal row w-100 m-0 p-0">
+    <li class="list-group-item dropdown col-3 text-wrap text-center font_full_size">
+      <a class="dropdown-toggle" href="#" id="DropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        {{ ticker.ticker | upper() }}
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="DropdownMenuLink">
+        <li><a class="dropdown-item" href="/sandbox/sell?q={{ticker.ticker}}">Продать</a></li>
+      </ul>
+    </li>
+
+
+    <li class="list-group-item col-2 text-center">{{ ticker.number }}</li>
+    {% if g.user['email'] %}
+    <li class="list-group-item col-3 p-0">
+      <div class="w-100 text-center text-primary pb-2 pt-2" style="font-size: 0.9rem;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_{{ticker.ticker}}" aria-expanded="false" aria-controls="collapse_{{ticker.ticker}}">
+        {% if ticker.market == 'облигации' %}
+        {{ ticker.current_price | finance }}&#160%
+        {% else %}
+        {{ ticker.current_price | finance }}&#160&#8381
+        {% endif %}
+      </div>
+      <div class="collapse mt-1" id="collapse_{{ticker.ticker}}">
+        <div>
+
+          <input type="text" class="form-control form-control-sm" name="min_border {{ticker.ticker}}" autocomplete="off" placeholder="Min" value="{% if ticker.min_border%}{{ticker.min_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
+          <input type="text" class="form-control form-control-sm" name="max_border aflt" autocomplete="off" placeholder="Max" value="{% if ticker.max_border%}{{ticker.max_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
+          <div class="input-group-text input-group-sm">
+            {% if ticker.notification == 'true' %}
+            <input type="checkbox" class="btn-check mt-0" id="check_notify_{{ticker.ticker}}" name="check_notify {{ticker.ticker}}" value="true" autocomplete="off" checked onchange="enable_update_button()">
+            {% else %}
+            <input type="checkbox" class="btn-check mt-0" id="check_notify_{{ticker.ticker}}" name="check_notify {{ticker.ticker}}" value="true" autocomplete="off" onchange="enable_update_button()">
+            {% endif %}
+            <label class="btn btn-sm btn-outline-primary w-100" for="check_notify_{{ticker.ticker}}">notify</label>
+          </div>
+
+        </div>
+      </div>
+    </li>
+    {% else %}
+    <li class="list-group-item col-3 text-center">
+      {% if ticker.market == 'облигации' %}
+      {{ ticker.current_price | finance }}&#160%
+      {% else %}
+      {{ ticker.current_price | finance }}&#160&#8381
+      {% endif %}
+    </li>
+    {% endif %}
+
+    <li class="list-group-item col-4 text-center">{{ ticker.final_price | finance }}&#160&#8381</li>
+  </ul>
+
+  {% endfor %}
+
+
+  <ul class="list-group list-group-horizontal row text-center w-100 m-0 p-0 font_full_size">
+    <li class="list-group-item mob_table_footer col-5 fw-bold">Баланс</li>
+    <li class="list-group-item mob_table_footer col-7 fw-bold">{{ cash | finance}}&#160&#8381</li>
+  </ul>
+  <ul class="list-group list-group-horizontal row text-center w-100 m-0 p-0 font_full_size">
+    <li class="list-group-item mob_table_footer col-5 fw-bold">Итого</li>
+    <li class="list-group-item mob_table_footer col-7 fw-bold">{{ total | finance}}&#160&#8381</li>
+  </ul>
+
+
+  <button id="button_update_mobile" class="btn btn-outline-primary w-100 disabled mb-3 mt-2" type="submit">Применить</button>
+
+</form>
+{% endblock %}

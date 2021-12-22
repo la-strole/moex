@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+<form action="/auth/register" method="post">
+  <div class="form-group mb-3">
+    <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Логин (не более 20)" required maxlength="20" type="text">
+  </div>
+  <div class="form-group mb-3">
+    <input autocomplete="off" class="form-control" name="email" placeholder="Email" type="email">
+  </div>
+  <div class="form-group mb-3">
+    <input class="form-control" name="password" placeholder="Пароль (не более 20)" maxlength="20" type="password" required>
+  </div>
+  <div class="form-group mb-3">
+    <input class="form-control" name="confirmation" placeholder="Подтвердите пароль" maxlength="20" type="password" required>
+  </div>
+  <div class="form-group mb-3 text-center">
+    <label for="acc_type">Тип аккаунта:</label>
+
+    <select class="form-select" name="type" id="acc_type">
+      <option value="private" selected>Private</option>
+      <option value="public">Public</option>
+
+    </select>
+  </div>
+  <div class="text-center">
+    <button class="btn btn-primary w-100" type="submit">Регистрация</button>
+  </div>
+</form>
+{% endblock %}

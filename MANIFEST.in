@@ -1,0 +1,5 @@
+include requirements.txt
+include moex_invest/schema.sql
+graft moex_invest/static
+graft moex_invest/templates
+global-exclude *.pyc

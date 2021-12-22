@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Settings
+{% endblock %}
+
+{% block main %}
+
+<form action="/sandbox/settings" method="post" style="width: 100vw; display: flex; justify-content: center;">
+
+
+  <div style="width: 90%; max-width: 550px;" class="mt-4 ms-2 me-2 mt-sm-0">
+
+    <div class="text-center mb-3 mt-3">
+      <h2>{{ g.user['username'] }}</h2>
+    </div>
+
+    <div class="card card-body" style="background-color: #f8f9fa;">
+      <div class="mb-4">
+        <label for="input_name" class="form-label">Изменить имя пользователя ({{ g.user['username'] }})</label>
+        <input type="text" class="form-control" id="input_name" name="name" maxlength="20" autofocus autocomplete="off" aria-describedby="nameHelp">
+        <div id="nameHelp" class="form-text">Введите новое имя пользователя (не более 20 символов).</div>
+      </div>
+
+      <div class="mb-4">
+        <label for="input_password" class="form-label">Изменить пароль</label>
+
+        <input type="password" class="form-control" id="input_password" name="password" maxlength="20" autocomplete="off" aria-describedby="passwordHelp">
+        <div id="passwordHelp" class="form-text mb-3">Введите старый пароль.</div>
+
+        <input type="password" class="form-control" id="input_new_password" name="new_password" maxlength="20" autocomplete="off" aria-describedby="passwordHelp">
+        <div id="passwordHelp" class="form-text mb-3">Введите новый пароль (не более 20 символов).</div>
+
+        <input type="password" class="form-control" id="input_new_password_conf" name="new_password_conf" maxlength="20" autocomplete="off" aria-describedby="password_confHelp">
+        <div id="password_confHelp" class="form-text">Подтвердите новый пароль.</div>
+
+      </div>
+
+      <div class="mb-4">
+        <label for="input_email" class="form-label">Изменить email ({{g.user['email']}})</label>
+        <input type="email" class="form-control" id="input_email" name="email" maxlength="30" autocomplete="off" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">Введите новый Email.</div>
+      </div>
+
+      {% if g.user.account_type == 'private' %}
+      <div class="mb-4">
+        <label for="input_account" class="form-label">Изменить баланс счета (текущий: {{account}})</label>
+        <input type="number" class="form-control" id="input_account" name="account" min="1" max="100000000" autocomplete="off" aria-describedby="accountHelp">
+        <div id="accountHelp" class="form-text">Введите целое число от 1 до 100 000 000 без пробелов.</div>
+      </div>
+      {% endif %}
+
+      <div class="form-check mb-3">
+        <input class="form-check-input text-danger" type="checkbox" value="true" name="delete_acc" id="delete-acc">
+        <label class="form-check-label text-danger" for="delete-acc">
+          Удалить аккаунт
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Подтвердить</button>
+    </div>
+
+  </div>
+</form>
+
+{% endblock %}
