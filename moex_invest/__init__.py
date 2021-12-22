@@ -72,10 +72,6 @@ def create_app():
     # Register app with db.py (database logic)
     db.init_app(app)
 
-    # Register scheduler.py (schedule functions)
-    from . import schedule
-    schedule.init(app.config.get("DATABASE"))
-
     # Register auth blueprint
     from . import auth
     app.register_blueprint(auth.bp)

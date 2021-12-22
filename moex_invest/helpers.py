@@ -7,6 +7,7 @@ from datetime import datetime
 class helpers_functions:
     # Get database name from __init__.py application fabric
     database_name = None
+    schedule_count = 0
 
     @staticmethod
     def lookup(symbol):
