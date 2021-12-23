@@ -8,6 +8,7 @@ from moex_invest.db import get_db
 from moex_invest.helpers import helpers_functions
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+import pytz
 import re
 
 bp = Blueprint('sandbox', __name__, url_prefix="/sandbox")
@@ -152,7 +153,7 @@ def quote():
                              "INTO log (user_id, ticker, operation, price, price_total, number, date_time)"
                              "VALUES (?,?,?,?,?,?,?)",
                              (g.user['user_id'], results['secid'], 'buy', results['offer'], final_price,
-                              int(number) * int(lotsize), datetime.now().isoformat()))
+                              int(number) * int(lotsize), datetime.now(tz=pytz.timezone('Europe/Moscow')).isoformat()))
 
             # 4 Commit transaction changes
             database.execute("commit")
@@ -509,7 +510,7 @@ def sell():
                              "INTO log (user_id, ticker, operation, price, price_total, number, date_time)"
                              "VALUES (?,?,?,?,?,?,?)",
                              (g.user['user_id'], results['secid'], 'sell', results['bid'], final_price,
-                              int(number) * int(lotsize), datetime.now().isoformat()))
+                              int(number) * int(lotsize), datetime.now(tz=pytz.timezone('Europe/Moscow')).isoformat()))
 
             # 5. Commit transaction changes
             database.execute("commit")

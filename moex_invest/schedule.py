@@ -1,7 +1,7 @@
 """
 Schedule registered at __init__.py file and there run init().
 """
-import os
+
 import sqlite3
 import pytz
 import requests
@@ -250,7 +250,7 @@ def schedule():
             with database:
                 database.execute("INSERT INTO app_log (log_text, date_time) "
                                  "VALUES (?, ?)",
-                                 (message, datetime.now().isoformat()))
+                                 (message, datetime.now(tz=pytz.timezone('Europe/Moscow')).isoformat()))
 
             database.close()
 

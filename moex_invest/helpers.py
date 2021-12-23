@@ -2,7 +2,7 @@ import re
 import requests
 import sqlite3
 from datetime import datetime
-
+import pytz
 
 class helpers_functions:
     # Get database name from __init__.py application fabric
@@ -521,7 +521,7 @@ class helpers_functions:
             with database:
                 database.execute("INSERT INTO app_log (log_text, date_time) "
                                  "VALUES (?, ?)",
-                                 (message, datetime.now().isoformat()))
+                                 (message, datetime.now(tz=pytz.timezone('Europe/Moscow')).isoformat()))
 
             database.close()
 
