@@ -210,7 +210,7 @@ Depo
         <div>
 
           <input type="text" class="form-control form-control-sm" name="min_border {{ticker.ticker}}" autocomplete="off" placeholder="Min" value="{% if ticker.min_border%}{{ticker.min_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
-          <input type="text" class="form-control form-control-sm" name="max_border aflt" autocomplete="off" placeholder="Max" value="{% if ticker.max_border%}{{ticker.max_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
+          <input type="text" class="form-control form-control-sm" name="max_border {{ticker.ticker}}" autocomplete="off" placeholder="Max" value="{% if ticker.max_border%}{{ticker.max_border}}{% endif %}" maxlength="9" onchange="enable_update_button()">
           <div class="input-group-text input-group-sm">
             {% if ticker.notification == 'true' %}
             <input type="checkbox" class="btn-check mt-0" id="check_notify_{{ticker.ticker}}" name="check_notify {{ticker.ticker}}" value="true" autocomplete="off" checked onchange="enable_update_button()">

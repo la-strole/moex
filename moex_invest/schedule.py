@@ -359,8 +359,8 @@ def schedule():
             return None
 
         text_footer = f"\n Это сообщение создано автоматически. Пожалуйста, не отвечайте на него. " \
-                      f"\n С уважением, Invest app Bot. " \
-                      f"{datetime.now(tz=pytz.timezone('Europe/Moscow')).today().strftime('%d.%m.%y')}"
+                      f"\n С уважением, Invest app Bot.  https://lastrole.pythonanywhere.com" \
+                      f"{datetime.now(tz=pytz.timezone('Europe/Moscow')).strftime('%d.%m.%y')}"
 
         sent_mail_number = 0
 
