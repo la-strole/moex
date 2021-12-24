@@ -1,4 +1,5 @@
 # Ivestment MOEX
+# CODE FOR PYTHONANYWHERE DEPLOYMENT
 ## Video Demo:  https://youtu.be/HZUL9YLb3X0
 ## Web site:  https://lastrole.pythonanywhere.com
 ## Source code: https://github.com/la-strole/moex
