@@ -33,7 +33,7 @@
 2. Клонируйте репозиторий в рабочий каталог:    `git clone https://github.com/la-strole/moex.git`
 3. Создайте виртуальную среду: `python3 -m venv env`
 4. Перейдите в созданную среду: `source env/bin/activate`
-5. Установите зависимости: `pip install requirements.txt `
+5. Установите зависимости: `pip install -r requirements.txt `
 6. В рабочем каталоге создайте файл `.env` следующего вида:
     ```
     # path to app configuration file to override default settings 
