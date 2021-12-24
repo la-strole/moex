@@ -41,7 +41,7 @@
     # export MOEX_SANDBOX_SETTINGS=<path_to_your_working_directory>/config_production.py
    
     # path to Flask app
-    export FLASK_APP=<path_to_your_working_directory>/moex_sandbox/moex_invest
+    export FLASK_APP=<path_to_your_working_directory>/moex_invest
    
     # to debug mode
     export FLASK_ENV=development
