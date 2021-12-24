@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+
+{% block js_import_block %}
+<!-- add ajax for symbols of quote request -->
+<script src="{{ url_for('static', filename='sell.js') }}"></script>
+{% endblock %}
+
+{% block title %}
+Sell
+{% endblock %}
+
+{% block main %}
+
+<form action="/sandbox/sell" method="post" style="width: 100vw; display: flex; justify-content: center;">
+
+
+  <div style="width: 90%; max-width: 550px;" class="mt-4 ms-2 me-2 mt-sm-0">
+
+    <div class="text-center mb-3">
+      <h2>{{ g.user['username'] }}</h2>
+    </div>
+
+    <div class="form-group row">
+      <div class="col-12" id="ticker_alert_parrent">
+        <select id='sell_select' class="form-select w-100" name="ticker" autocomplete="off" autofocus required>
+          <option id="default_option" disabled selected>Выберите тикер</option>
+          {% for ticker in tickers %}
+          <option id='option_{{ ticker.ticker }}' value="{{ ticker.ticker }}">{{ ticker.ticker | upper()}} {{ ticker.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-8">
+        <p>Биржевая котировка</p>
+      </div>
+      <div class="col-4">
+        <p id="market_price" class="text-center">N/A</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-8">
+        <p>Величина лота</p>
+      </div>
+      <div class="col-4">
+        <p id="lot" class="text-center">N/A</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-8">
+        <p>В вашем депозитарии</p>
+      </div>
+      <div class="col-4">
+        <p id="depo_number" class="text-center">N/A</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-8">
+        <p>Лучший спрос</p>
+      </div>
+      <div class="col-4">
+        <p id="bid" class="text-center">N/A</p>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-start">
+      <div class="col-6 col-sm-4">
+        <button id="button_more_info" class="btn btn-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#detail_info" aria-expanded="false" aria-controls="detail_info">
+          Подробнее
+        </button>
+      </div>
+    </div>
+
+    <div class="row m-0 p-0" style="width: 100%;">
+      <div class="collapse col-12 w-100 m-0 p-0" id="detail_info">
+        <div class="card card-body w-100 m-0 p-0">
+          <table id="parent_table" class="table table-striped table-hover">
+            <tbody id="parent_add_detail_info">
+              <!-- input data from result here-->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="row d-flex justify-content-between align-content-center mt-5">
+      <div class="col-12 col-sm-4">
+        <input id="number_share" autocomplete="off" class="form-control w-100" name="number" type="number" min="1" required placeholder="Кол-во лотов">
+      </div>
+      <div class="col-12 col-sm-4 mt-2 mt-sm-0">
+        <button id="button_sell" class="btn btn-outline-primary w-100 disabled" type="submit">Продать</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  var tickers_max_dict = {}; 
+  {% for ticker in tickers %}
+    tickers_max_dict['{{ ticker.ticker }}'] = {{ ticker.number }}; 
+  {% endfor %}
+  var ticker_exist = {{ ticker_exist }};
+  if (ticker_exist == true) {
+    let element = document.getElementById('option_{{client_ticker}}');
+    document.getElementById("default_option").removeAttribute("selected");
+    element.setAttribute("selected", "selected");
+  };
+</script>
+
+{% endblock %}

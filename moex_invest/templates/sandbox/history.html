@@ -1,0 +1,147 @@
+{% extends "layout.html"%}
+
+{% block title %}
+History
+{% endblock %}
+
+{% block main %}
+
+<style>
+  @media all and (min-width: 1200px) {
+    .desktop {
+      display: block;
+    }
+
+    .mobile {
+      display: none;
+    }
+  }
+
+  @media all and (max-width: 1200px) {
+    .desktop {
+      display: none;
+    }
+
+    .mobile {
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    .font_full_size {
+      font-size: 1rem;
+    }
+
+  }
+</style>
+
+<div class="mobile w-100" style="min-width: 325px; max-width: 780px; background-color: #f8f9fa;">
+
+  <div class="row text-center justify-content-center m-0">
+    <h2 class="col mt-3 mb-3">История операций {{ g.user['username'] }}</h2>
+  </div>
+
+  <table class="table text-center align-middle text-break w-100">
+
+    <thead>
+      <tr class="row w-100 m-0 p-0 table-primary">
+        <th class="col-3">Тикер</th>
+        <th class="col-2">Кол-во</th>
+        <th class="col-3">Цена ед</th>
+        <th class="col-4">Дата</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      {% for ticker in tickers %}
+
+      <tr class="row w-100 m-0 p-0 {% if ticker.operation == 'buy' %} table-secondary {% else %} table-success {% endif %}">
+        <td class="col-3">
+
+          <div> {{ ticker.ticker | upper() }} </div>
+          {% if ticker.operation == 'buy' %}
+          <div class="badge bg-secondary">Покупка</div>
+          {% else %}
+          <div class="badge bg-success">Продажа</div>
+          {% endif %}
+
+        </td>
+        <td class="col-2">
+
+          {{ ticker.number }}
+
+        </td>
+        <td class="col-3">
+          {{ ticker.price | finance }}
+        </td>
+        <td class="col-4">
+          {{ ticker.date }} <br> {{ ticker.time }}
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+
+</div>
+
+<div class="desktop mt-4" style="width: 1200px; background-color: #f8f9fa;">
+
+  <div class="row w-90 text-center justify-content-center m-0 p-0">
+    <h2 class="col mt-3 mb-3">История операций {{ g.user['username'] }}</h2>
+  </div>
+
+  <table class="row w-100 table table-hover text-center align-middle text-break m-0 p-0">
+
+    <thead class="row w-100 m-0 p-0">
+      <tr class="row w-100 m-0 p-0 table-primary">
+        <th class="col-2">Тикер</th>
+        <th class="col-2">Операция</th>
+        <th class="col-2">Количество</th>
+        <th class="col-2">Цена единицы</th>
+        <th class="col-2">Дата</th>
+        <th class="col-2">Время</th>
+      </tr>
+    </thead>
+
+    <tbody class="row w-100 m-0 p-0">
+
+      {% for ticker in tickers %}
+
+      <tr class="row w-100 m-0 p-0 {% if ticker.operation == 'buy' %} table-secondary {% else %} table-success {% endif %}">
+        <td class="col-2">
+          {{ ticker.ticker | upper() }}
+        </td>
+        <td class="col-2">
+          {% if ticker.operation == 'buy' %}
+          Покупка
+          {% else %}
+          Продажа
+          {% endif %}
+        </td>
+
+        <td class="col-2">
+
+          {{ ticker.number }}
+
+        </td>
+        <td class="col-2">
+          {{ ticker.price | finance }}
+        </td>
+        <td class="col-2">
+          {{ ticker.date }}
+        </td>
+        <td class="col-2">
+          {{ ticker.time }}
+        </td>
+      </tr>
+      {% endfor %}
+
+    </tbody>
+  </table>
+
+
+</div>
+
+{% endblock %}

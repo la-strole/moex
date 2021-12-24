@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+
+    <!-- https://getbootstrap.com/docs/5.0/getting-started/introduction/ -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- https://www.vecteezy.com/vector-art/611753-finance-logo-and-symbols-vector-concept-illustration -->
+    <link href="{{ url_for('static', filename='favicon.ico') }}" rel="icon">
+
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+
+    <!-- https://fonts.google.com/specimen/Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- input JS for XMLHtttpRequest -->
+    {% block js_import_block %} {% endblock %}
+
+    <title>Investment: {% block title %}{% endblock %}</title>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='logo.svg') }}" alt="logo image" class="logo_img"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mynavbar">
+          {% if g.user %}
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/quote">Найти/Купить</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/sell">Продать</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/depo">Депозитарий</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/history">История</a>
+            </li>
+            {% if g.user['account_type'] == 'public' %}
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/rates">Рейтинги</a>
+            </li>
+            {% endif %}
+
+            <li class="nav-item">
+              <a class="nav-link" href="/sandbox/settings">Настройки</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/logout">Выход</a>
+            </li>
+
+          </ul>
+          {% else %}
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/login">Вход</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/auth/register">Регистрация</a>
+            </li>
+          </ul>
+          {% endif %}
+
+        </div>
+      </div>
+    </nav>
+
+
+    {% if get_flashed_messages() %}
+    <header>
+      <div class="alert alert-primary border text-center" role="alert">
+        {{ get_flashed_messages() | join(" ") }}
+      </div>
+    </header>
+    {% endif %}
+
+    <main>
+      {% block main %}{% endblock %}
+
+    </main>
+
+    <footer class="mt-1">
+      <div class="container-fluid">
+        <div class="row justify-content-between">
+          <div class="col-auto">
+            <ul class="footer_ul">
+              <li class="footer_ui_head"> Sources: </li>
+              <li> <a href="https://www.moex.com/a2193"> MOEX API </a> </li>
+              <li> <a href="https://www.vecteezy.com/free-vector/finance-logo">Finance Logo Vectors by Vecteezy</a> </li>
+              <li> <a href="https://free-images.com/display/abstract_blurry_texture_923304.html"> Background image</a></li>
+            </ul>
+          </div>
+
+          <div class="col-auto">
+            <ul class="footer_ul">
+              <li class="footer_ui_head"> Follow </li>
+              <li> Parkhomenko Eugene 2021</li>
+              <li> <a href="mailto:zhenya.aka.john@gmail.com"> @Eugene email</a> </li>
+              <li> Step_Lis#9166 Discord</li>
+              <li> <a href="https://github.com/la-strole"> @la-strole github</a> </li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+    </footer>
+  </body>
