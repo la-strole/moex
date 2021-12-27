@@ -1,4 +1,4 @@
-# Ivestment MOEX
+# Investment MOEX
 # CODE FOR PYTHONANYWHERE DEPLOYMENT
 ## Video Demo:  https://youtu.be/HZUL9YLb3X0
 ## Web site:  https://lastrole.pythonanywhere.com
