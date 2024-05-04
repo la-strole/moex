@@ -20,6 +20,6 @@ requests==2.26.0
 six==1.16.0
 tzdata==2021.5
 tzlocal==4.1
-urllib3==1.26.7
+urllib3==1.26.18
 Werkzeug==2.0.2
 yagmail==0.14.260
